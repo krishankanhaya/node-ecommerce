@@ -1,4 +1,10 @@
-## Ecommerce Feature Project
+##false falseEcommerce Feature Project
+
+# Project Scope
+
+0. Basic ecommerce backend.
+1. Scalable backend.
+2. Docker, Redis, MongoDB, AWS, Kafka and other things that i don't know yet?
 
 # Project Setup
 
@@ -13,4 +19,3 @@ ACCESS_TOKEN_SECRET=secret
 REFRESH_TOKEN_SECRET=secret``
 
 3. Run Project : ```npm run dev```
-

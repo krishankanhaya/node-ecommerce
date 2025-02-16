@@ -12,6 +12,5 @@ export const StatusCodes = {
 
   //Server Error 500
   "ServerError": 500
-
 }
 

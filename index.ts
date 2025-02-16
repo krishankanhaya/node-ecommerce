@@ -1,4 +1,4 @@
-import express, {type application, type request, type response, type next, type err} from 'express'
+import express, { type application, type request, type response, type next, type err } from 'express'
 import connection from './db/index.ts'
 import routes from './routes/index.ts'
 import Log from './models/Log.ts'
@@ -7,8 +7,7 @@ const app: application = express()
 
 // middlewares
 app.use(express.json())
-
-const PORT : number = Number(process.env.PORT) as number || 5000
+const PORT: number = Number(process.env.PORT) as number || 5000
 
 // route
 app.use('/auth', routes.authRoutes)
@@ -18,10 +17,10 @@ app.use('/admin', routes.adminRoutes)
 // TODO : later use for load balancing
 app.get('/test', (req: request, res: response) => {
   console.log('req', req)
-  res.status(200).json({message: 'test is success.'})
+  res.status(200).json({ message: 'test is success.' })
 })
 
-app.use(async (err: err, req: request, res: request, next:next) => {
+app.use(async (err: err, req: request, res: request, next: next) => {
   if (err) {
     try {
       await Log.create({
@@ -46,7 +45,7 @@ app.use((err: err, res: request) => {
   })
 })
 
-app.listen(PORT, ()=> {
+app.listen(PORT, () => {
 
   // db connection
   connection
