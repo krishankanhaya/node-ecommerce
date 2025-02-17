@@ -1,4 +1,4 @@
-##false falseEcommerce Feature Project
+## Ecommerce Feature Project
 
 # Project Scope
 
@@ -8,7 +8,7 @@
 
 # Project Setup
 
-0. Dependancy Installation : Node version >= 23.x.x , Latest MongoDB.
+0. Dependancy Installation : Node version >= 23.x.x , Latest MongoDB is used 4.4 because my cpu doesn't support AVF and redis in docker.
 
 1. Clone project : ```git clone https://github.com/krishankanhaya/node-ecommerce.git```
 
@@ -16,6 +16,11 @@
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/ecom
 ACCESS_TOKEN_SECRET=secret
-REFRESH_TOKEN_SECRET=secret``
-
-3. Run Project : ```npm run dev```
+REFRESH_TOKEN_SECRET=secret
+REDIS_HOST=your_redis_server_host
+REDIS_PORT=your_redis_server_port
+RP_KEY_ID=rzp_test_key_id
+RP_SECRET_KEY=your_secret_key
+``
+3. Make sure redis and mongo server is running properly.
+4. Run Project : ```npm run dev```
