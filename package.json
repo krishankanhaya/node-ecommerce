@@ -22,6 +22,7 @@
     "express": "^4.21.2",
     "ioredis": "^5.5.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.10.0"
+    "mongoose": "^8.10.0",
+    "razorpay": "^2.9.5"
   }
 }

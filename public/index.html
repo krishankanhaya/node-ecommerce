@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!-- Sample Template code for processing payment -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment</title>
+  </head>
+  <body>
+    <h1>Razorpay Payment Gateway Integration</h1>
+    <form id="payment-form">
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount" required>
+      <button type="button" onclick="payNow()">Pay Now</button>
+    </form>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      async function payNow() {
+      const amount = document.getElementById('amount').value;
+      const BASE_URL = 'http://localhost:5000'
+      // Create order by calling the server endpoint
+      const response = await fetch(`${BASE_URL}/razorpay/createOrder`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({amount, currency: 'INR', receipt: 'receipt#1', notes: {}})
+      });
+
+      const order = await response.json();
+
+      // Open Razorpay Checkout
+      const options = {
+        key: 'rzp_test_tW3PuAD6y7PXVu', // i don't know why razoray sdk exposing it on client side or side effect of this
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Your Company Name',
+        description: 'Test Transaction',
+        order_id: order.id, // This is the order_id created in the backend
+        callback_url: `${BASE_URL}/razorpay/paymentSuccess`, // Your success URL
+        prefill: {
+          name: 'krishan kanhaya',
+          email: 'krishankanhaya@mymail.com',
+          contact: '9999999999'
+        },
+        theme: {
+          color: '#F37254'
+        },
+        handler: function (response) {
+          fetch(`${BASE_URL}/razorpay/verifyPayment`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          }).then(res => res.json())
+            .then(data => {
+              if (data.status === 'ok') {
+                window.location.href = `${BASE_URL}/payment/success.html`;
+              } else {
+                alert('Payment verification failed');
+              }
+            }).catch(error => {
+              console.error('Error:', error);
+              alert('Error verifying payment');
+            });
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+    </script>
+  </body>
+</html>

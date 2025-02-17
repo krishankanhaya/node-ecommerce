@@ -9,10 +9,13 @@ const app: application = express()
 app.use(express.json())
 const PORT: number = Number(process.env.PORT) as number || 5000
 
+// Serve static files
+app.use('/payment', express.static('./public'));
+
 // route
 app.use('/auth', routes.authRoutes)
 app.use('/admin', routes.adminRoutes)
-
+app.use('/razorpay', routes.razorPay)
 
 // TODO : later use for load balancing
 app.get('/test', (req: request, res: response) => {
