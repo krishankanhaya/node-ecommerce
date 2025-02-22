@@ -9,7 +9,7 @@ const app: application = express()
 app.use(express.json())
 const PORT: number = Number(process.env.PORT) as number || 5000
 
-// Serve static files
+// Serve static files for razorpay
 app.use('/payment', express.static('./public'));
 
 // route
@@ -19,7 +19,6 @@ app.use('/razorpay', routes.razorPay)
 
 // TODO : later use for load balancing
 app.get('/test', (req: request, res: response) => {
-  console.log('req', req)
   res.status(200).json({ message: 'test is success.' })
 })
 
@@ -49,7 +48,6 @@ app.use((err: err, res: request) => {
 })
 
 app.listen(PORT, () => {
-
   // db connection
   connection
     .then(() => {

@@ -1,0 +1,42 @@
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: ecommerce-cmongo
+    networks:
+      - ecommerce-app-network
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:latest
+    container_name: ecommerce-redis
+    networks:
+      - ecommerce-app-network
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env
+
+  nodejs:
+    image: ecommerce:latest
+    container_name: nc
+    networks:
+      - ecommerce-app-network
+    depends_on:
+      - mongo
+      - redis
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+
+networks:
+  ecommerce-app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

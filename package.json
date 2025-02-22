@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "dev": "nodemon --exec 'node --env-file=.env' index.ts",
-    "start": "node --exec 'node --env-file=.env' index.ts"
+    "dev": "nodemon index.ts",
+    "start": "node index.ts"
   },
   "type": "module",
   "keywords": [],
