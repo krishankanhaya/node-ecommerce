@@ -9,6 +9,7 @@
 ## Project Setup
 
 -- with docker
+
 0. Clone project : ```git clone https://github.com/krishankanhaya/node-ecommerce.git```
 1. Create .env file :``
 PORT=5000
@@ -24,6 +25,7 @@ RP_SECRET_KEY=your_secret_key
 3. ``sudo docker compose up``
 
 -- without docker
+
 0. Dependancy Installation : Node version >= 23.x.x , Latest MongoDB is used 4.4 because my cpu doesn't support AVF and redis in docker.
 
 1. Clone project : ```git clone https://github.com/krishankanhaya/node-ecommerce.git```
