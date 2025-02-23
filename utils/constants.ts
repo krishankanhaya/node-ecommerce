@@ -9,6 +9,7 @@ export const StatusCodes = {
   "BadRequest": 400,
   "Unauthorized": 401,
   "NotFound": 404,
+  "TooManyReqest": 429,
 
   //Server Error 500
   "ServerError": 500
