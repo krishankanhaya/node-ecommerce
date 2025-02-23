@@ -11,16 +11,7 @@
 -- with docker
 
 0. Clone project : ```git clone https://github.com/krishankanhaya/node-ecommerce.git```
-1. Create .env file :``
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/ecom
-ACCESS_TOKEN_SECRET=secret
-REFRESH_TOKEN_SECRET=secret
-REDIS_HOST=your_redis_server_host
-REDIS_PORT=your_redis_server_port
-RP_KEY_ID=rzp_test_key_id
-RP_SECRET_KEY=your_secret_key
-``
+1. Create .env file : like .env-example
 2. ``sudo docker build -t ecommerce .``
 3. ``sudo docker compose up``
 
@@ -30,15 +21,6 @@ RP_SECRET_KEY=your_secret_key
 
 1. Clone project : ```git clone https://github.com/krishankanhaya/node-ecommerce.git```
 
-2. Create .env file :``
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/ecom
-ACCESS_TOKEN_SECRET=secret
-REFRESH_TOKEN_SECRET=secret
-REDIS_HOST=your_redis_server_host
-REDIS_PORT=your_redis_server_port
-RP_KEY_ID=rzp_test_key_id
-RP_SECRET_KEY=your_secret_key
-``
+2. Create .env file : like .env-example
 3. Make sure redis and mongo server is running properly.
 4. Run Project : ```npm run dev```

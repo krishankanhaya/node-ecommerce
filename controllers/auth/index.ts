@@ -30,7 +30,7 @@ const register = async (req: request, res: response, next: next) => {
     const newUser = await Users.create(req.body)
     await newUser.save()
     const regOtp = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000)
-    sendMailer(process.APP_EMAIL, newUser.email, 'Registration OTP', `Your OTP : ${regOtp}.`, `<html><body><h1>Your OTP : ${regOtp}<h1></body></html>`)
+    sendMailer(process.env.APP_EMAIL as string, newUser.email, 'Registration OTP', `Your OTP : ${regOtp}.`, `<html><body><h1>Your OTP : ${regOtp}<h1></body></html>`)
     await redis.set(`RegOtp:${newUser._id}`, regOtp, 'EX', 600)
     if (newUser) res.status(StatusCodes.Created).json({ message: 'Registration is successfull.', newUser })
 
