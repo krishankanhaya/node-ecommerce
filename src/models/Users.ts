@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import bcryptjs from 'bcryptjs'
-import { roles } from '../utils/constants.ts'
+import { roles } from '../utils/constants.js'
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   },
   stores: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }],
-    required: function() { return this.role === 'VENDOR' }
+    // required: function() { return this.role === 'VENDOR' }
   },
   status: {
     type: Boolean,

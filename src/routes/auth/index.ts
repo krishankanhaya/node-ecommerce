@@ -1,5 +1,5 @@
 import express, { type Request, type Response, type Router } from 'express'
-import auth from '../../controllers/auth/index.ts'
+import auth from '../../controllers/auth/index.js'
 
 const authRoutes: Router = express.Router()
 

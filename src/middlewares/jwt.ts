@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express'
-import User from '../models/Users.ts'
+import User from '../models/Users.js'
 import jwt from 'jsonwebtoken'
-import { StatusCodes } from '../utils/constants.ts';
+import { StatusCodes } from '../utils/constants.js';
 
 type UserInterface = {
   _id: any;
@@ -12,11 +12,11 @@ type UserInterface = {
 }
 
 export const generateAccessToken = (user: UserInterface) => {
-  return jwt.sign({ userId: user._id, role: user.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+  return jwt.sign({ userId: user._id, role: user.role }, process.env.ACCESS_TOKEN_SECRET || '', { expiresIn: '15m' })
 }
 
 export const generateRefreshToken = (user: UserInterface) => {
-  return jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
+  return jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET || '', { expiresIn: '7d' })
 }
 
 export const getNewAccessToken = (req: Request, res: Response) => {
@@ -27,7 +27,7 @@ export const getNewAccessToken = (req: Request, res: Response) => {
   }
 
   // Verify the refresh token
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err: unknown, decoded: UserInterface) => {
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || '', async (err: unknown, decoded: any) => {
     if (err) {
       return res.status(StatusCodes.FORBIDDEN).json({ message: 'Invalid or expired refresh token' })
     }

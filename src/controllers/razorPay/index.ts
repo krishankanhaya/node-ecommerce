@@ -1,9 +1,9 @@
-import { type request, type response } from 'express'
+import { type Request, type Response } from 'express'
 import Razorpay from "razorpay"
 import { validateWebhookSignature } from 'razorpay/dist/utils/razorpay-utils.js'
 import fs from 'fs'
 
-const razorpay = new Razorpay({
+const razorpay: any = new Razorpay({
   key_id: process.env.RP_KEY_ID as string,
   key_secret: process.env.RP_SECRET_KEY as string,
 })
@@ -26,7 +26,7 @@ const writeData = (data: any) => {
 if (!fs.existsSync('orders.json')) {
   writeData([]);
 }
-const createOrder = async (req: request, res: response) => {
+const createOrder = async (req: Request, res: Response) => {
   try {
     const { amount, currency, receipt, notes } = req.body;
 
@@ -58,10 +58,10 @@ const createOrder = async (req: request, res: response) => {
 }
 
 // Route to handle payment verification
-const verifyPayment = async (req: request, res: response) => {
+const verifyPayment = async (req: Request, res: Response) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
-  const secret: string = razorpay.key_secret;
+  const secret: string = razorpay?.key_secret;
   const body = razorpay_order_id + '|' + razorpay_payment_id;
 
   try {
@@ -69,7 +69,7 @@ const verifyPayment = async (req: request, res: response) => {
     if (isValidSignature) {
       // Update the order with payment details
       const orders = await readData();
-      const order = orders.find(o => o.order_id === razorpay_order_id);
+      const order = orders.find((o: any) => o.order_id === razorpay_order_id);
       if (order) {
         order.status = 'paid';
         order.payment_id = razorpay_payment_id;

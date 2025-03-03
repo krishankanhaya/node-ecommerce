@@ -1,7 +1,7 @@
 import express, { type Application, type Request, type Response, type NextFunction, } from 'express'
-import connection from './db/index.ts'
-import routes from './routes/index.ts'
-import Log from './models/Log.ts'
+import connection from './db/index.js'
+import routes from './routes/index.js'
+import Log from './models/Log.js'
 
 const app: Application = express()
 

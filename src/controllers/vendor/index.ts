@@ -1,8 +1,8 @@
 import { type Request, type Response, type NextFunction } from 'express'
-import Store from '../../models/Store.ts'
-import Users from '../../models/Users.ts'
-import Category from '../../models/Category.ts'
-import { StatusCodes } from '../../utils/constants.ts'
+import Store from '../../models/Store.js'
+import Users from '../../models/Users.js'
+import Category from '../../models/Category.js'
+import { StatusCodes } from '../../utils/constants.js'
 
 const createStore = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,7 +17,7 @@ const createStore = async (req: Request, res: Response, next: NextFunction) => {
       res.status(400).json({ message: "All required fields must be provided" });
     }
 
-    let vendor = await Users.findOne({ _id: vendorId })
+    let vendor: any = await Users.findOne({ _id: vendorId })
     if (!vendor) res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ message: `Vendor doesn't exist with this vendorId.` })
 
     // Check if shop already exists
@@ -44,7 +44,7 @@ const createCategory = async (req: Request, res: Response, next: NextFunction) =
     const { _id, name, parant } = req.body
     if (!name || !_id) res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ messaeg: 'Category name and storeId(_id) is requird.' })
 
-    let store = await Store.findOne({ _id })
+    let store: any = await Store.findOne({ _id })
     if (!store) res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({ message: 'There is no shop exist with this storeId(_id).' })
 
     let existCategory = await Category.findOne({ name })

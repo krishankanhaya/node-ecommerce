@@ -1,11 +1,11 @@
 import { type Request, type Response, type NextFunction } from 'express'
 import bcrypt from 'bcryptjs'
-import Users from '../../models/Users.ts'
-import Store from '../../models/Store.ts'
-import { redis } from '../../redis/index.ts'
-import { roles, StatusCodes } from '../../utils/constants.ts'
-import { generateAccessToken, generateRefreshToken } from '../../middlewares/jwt.ts'
-import sendMailer from '../../utils/mailer.ts'
+import Users from '../../models/Users.js'
+import Store from '../../models/Store.js'
+import { redis } from '../../redis/index.js'
+import { roles, StatusCodes } from '../../utils/constants.js'
+import { generateAccessToken, generateRefreshToken } from '../../middlewares/jwt.js'
+import sendMailer from '../../utils/mailer.js'
 
 type UserInterface = {
   _id: any
@@ -21,19 +21,19 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
     const { name, email, password, role, stores } = req.body
 
     if (!name || !email || !password || !role || !roles.includes(role)) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid request. Request must have name, email, role, and password.' });
+      res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid request. Request must have name, email, role, and password.' });
     }
 
     const existingUser = await Users.findOne({ email })
     if (existingUser) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User with this email already exists. Please try another email.' });
+      res.status(StatusCodes.BAD_REQUEST).json({ message: 'User with this email already exists. Please try another email.' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await Users.create({ name, email, password: hashedPassword, role });
 
     if (role === 'VENDOR' && (!stores || stores.length === 0)) {
-      return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please provide at least one store detail for vendor registration.' });
+      res.status(StatusCodes.BAD_REQUEST).json({ message: 'Please provide at least one store detail for vendor registration.' });
     }
 
     if (role === 'VENDOR') {
@@ -46,10 +46,10 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
     sendMailer(process.env.APP_EMAIL as string, newUser.email, 'Registration OTP', `Your OTP: ${regOtp}.`, `<html><body><h1>Your OTP: ${regOtp}</h1></body></html>`);
     await redis.set(`RegOtp:${newUser._id}`, regOtp, 'EX', 600);
 
-    return res.status(StatusCodes.CREATED).json({ message: 'Registration successful.', newUser });
-  } catch (error) {
+    res.status(StatusCodes.CREATED).json({ message: 'Registration successful.', newUser });
+  } catch (error: any) {
     console.error(`Error during registration.`, error);
-    return next(new Error(error.message || "Something went wrong!"));
+    next(new Error(error.message || "Something went wrong!"));
   }
 };
 
