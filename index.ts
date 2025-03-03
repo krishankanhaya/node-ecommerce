@@ -1,9 +1,9 @@
-import express, { type application, type request, type response, type next, type err } from 'express'
+import express, { type Application, type Request, type Response, type NextFunction, } from 'express'
 import connection from './db/index.ts'
 import routes from './routes/index.ts'
 import Log from './models/Log.ts'
 
-const app: application = express()
+const app: Application = express()
 
 // middlewares
 app.use(express.json())
@@ -15,24 +15,26 @@ app.use('/payment', express.static('./public'));
 // route
 app.use('/auth', routes.authRoutes)
 app.use('/admin', routes.adminRoutes)
+app.use('/vendor', routes.vendorRoutes)
 app.use('/razorpay', routes.razorPay)
 
 // TODO : later use for load balancing
-app.get('/test', (req: request, res: response) => {
+app.get('/test', (_: Request, res: Response) => {
   res.status(200).json({ message: 'test is success.' })
 })
 
-app.use(async (err: err, req: request, res: request, next: next) => {
+app.use(async (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err) {
     try {
-      await Log.create({
+      const newLog = await Log.create({
         method: req.method,
         ip: req.ip,
         reqBody: JSON.stringify(req.body),
         url: req.originalUrl,
-        status: res.statusCode || 500,
+        status: res.status || 500,
         message: err.message,
       })
+      await newLog.save()
     } catch (dbError) {
       console.error("Error saving log to database:", dbError)
     }
@@ -40,7 +42,7 @@ app.use(async (err: err, req: request, res: request, next: next) => {
   next(err)
 })
 
-app.use((err: err, res: request) => {
+app.use((err: Error, _: Request, res: Response, next: NextFunction) => {
   res.status(500).json({
     success: false,
     error: err.message || "Internal Server Error",

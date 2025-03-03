@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     default: roles[2],
     enum: roles,
   },
+  stores: {
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store' }],
+    required: function() { return this.role === 'VENDOR' }
+  },
   status: {
     type: Boolean,
     required: true,

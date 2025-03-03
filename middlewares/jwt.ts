@@ -1,6 +1,7 @@
-import {type request, type resposne} from 'express'
-import jwt from 'jsonwebtoken'
+import { type Request, type Response } from 'express'
 import User from '../models/Users.ts'
+import jwt from 'jsonwebtoken'
+import { StatusCodes } from '../utils/constants.ts';
 
 type UserInterface = {
   _id: any;
@@ -18,29 +19,29 @@ export const generateRefreshToken = (user: UserInterface) => {
   return jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
 }
 
-export const getNewAccessToken = (req: request, res: resposne) => {
-  const refreshToken = req.cookies.refreshToken // Get refresh token from HTTP-only cookie
+export const getNewAccessToken = (req: Request, res: Response) => {
+  const refreshToken = req.cookies.refreshToken
 
   if (!refreshToken) {
-    return res.status(403).json({ message: 'Refresh token not provided' })
+    return res.status(StatusCodes.FORBIDDEN).json({ message: 'Refresh token not provided' })
   }
 
   // Verify the refresh token
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err: unknown, decoded: UserInterface) => {
     if (err) {
-      return res.status(403).json({ message: 'Invalid or expired refresh token' })
+      return res.status(StatusCodes.FORBIDDEN).json({ message: 'Invalid or expired refresh token' })
     }
 
     // Find the user by the decoded userId
-    const user: UserInterface | any = await User.findOne({_id: decoded._id}, {v:0})
+    const user: UserInterface | any = await User.findOne({ _id: decoded._id }, { v: 0 })
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' })
+      return res.status(StatusCodes.NOT_FOUND).json({ message: 'User not found' })
     }
 
     // Generate a new access token
     const newAccessToken = generateAccessToken(user)
 
-    res.status(200).json({ accessToken: newAccessToken })
+    return res.status(200).json({ accessToken: newAccessToken })
   })
 }
